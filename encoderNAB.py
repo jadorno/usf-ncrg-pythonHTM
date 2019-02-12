@@ -3,6 +3,10 @@ import pandas as pd
 import datetime
 # import csv
 
+import config
+
+# [ToDo: Replace all data and use data from config].
+
 class encoderNAB:
     """Encodes the data in the input csv file provided in the Numenta Anomaly
     """
@@ -110,13 +114,3 @@ class encoderNAB:
         return final_scr
 
 
-def main():
-    filename = "C:/Users/kamidi/Desktop/NCRG Janardhan/HTM/HTM Code/NCRG pythonHTM/NAB_input_csv_files/numentaTM_speed_7578.csv"
-    en = encoderNAB()
-    en.encode(filename, 21)
-    print("After encode function")
-
-
-
-if __name__ == '__main__':
-    main()
