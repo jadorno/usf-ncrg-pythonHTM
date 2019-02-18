@@ -5,28 +5,13 @@ import datetime
 
 import config
 
-# [ToDo: Replace all data and use data from config].
 
 class encoderNAB:
     """Encodes the data in the input csv file provided in the Numenta Anomaly
     """
-    data = {}
+    # data = {}
     def __init__(self):
         print("encoder constructor called")
-        # data = {}
-        # self.fields
-        # self.buckets
-        # self.width
-        # self.circularP
-        # self.shift
-        # self.N
-        # self.labels
-        # self.numentaAnomalyScore
-        # self.numentaRawAnomalyScore
-        # self.nBits
-        # self.name
-        # self.value
-        # self.code
 
     def datevec(self, date_time):
         """Converts datetime of format '2015-09-08 11:39:00' to %[y, month, d, timeOfDay, m, s] """
@@ -50,17 +35,17 @@ class encoderNAB:
     def encode(self, filename, width):
         """encode the data"""
         print("inside encode function")
-        self.data['fieldNames'] = np.array(['data_value', 'month', 'day_of_week','time_of_day', 'weeeknd'])
-        self.data['fields'] = np.array([0, 3])
-        self.data['buckets'] = np.array([120, 12, 7, 24, 2])
-        self.data['width'] = np.array([width, width, width, width, width])
-        self.data['circularP'] = np.array([False, True, True, True, True])
-        self.data['shift'] = np.array([1, 1, 1, 1, width])
+        config.data['fieldNames'] = np.array(['data_value', 'month', 'day_of_week','time_of_day', 'weeeknd'])
+        config.data['fields'] = np.array([0, 3])
+        config.data['buckets'] = np.array([120, 12, 7, 24, 2])
+        config.data['width'] = np.array([width, width, width, width, width])
+        config.data['circularP'] = np.array([False, True, True, True, True])
+        config.data['shift'] = np.array([1, 1, 1, 1, width])
 
         # Read Data
         readData = pd.read_csv(filename)
-        self.data['N'] = readData.shape[0]
-        print(self.data['fields'])
+        config.data['N'] = readData.shape[0]
+        print(config.data['fields'])
         print(readData.ix[:, 0])
         # dateTime = readData.ix[1:readData.shape[0], 0]
         rawData = self.datevec(readData.ix[:, 0].values)
@@ -69,37 +54,37 @@ class encoderNAB:
         print("before printing rawData")
         print(rawData)
         print("after printing rawData")
-        self.data['labels'] = readData.ix[:, 4]
-        self.data['numentaAnomalyScore'] = readData.ix[:, 2]
-        self.data['numentaRawAnomalyScore'] = readData.ix[:, 3]
-        print(self.data)
+        config.data['labels'] = readData.ix[:, 4]
+        config.data['numentaAnomalyScore'] = readData.ix[:, 2]
+        config.data['numentaRawAnomalyScore'] = readData.ix[:, 3]
+        print(config.data)
 
         # Decide on bits of representation
-        self.data['nBits'] = self.data['shift'] * self.data['buckets']
-        self.data['nBits'][4] = 2*self.data['width'][4]
-        self.data['nBits'][0] = self.data['shift'][0] * self.data['buckets'][0] + self.data['width'][0] - 1
+        config.data['nBits'] = config.data['shift'] * config.data['buckets']
+        config.data['nBits'][4] = 2*config.data['width'][4]
+        config.data['nBits'][0] = config.data['shift'][0] * config.data['buckets'][0] + config.data['width'][0] - 1
         print("before self data print")
-        print(self.data)
+        print(config.data)
         print("after self data print")
 
         # Assign the selected data as specified in the variable data.fields to the output
-        self.data['name'] = ["" for x in range(self.data['fieldNames'].shape[0])]
-        self.data['value'] = np.zeros(self.data['fieldNames'].shape).tolist()
-        self.data['code'] = np.zeros(self.data['fieldNames'].shape).tolist()
-        for i in range(0, len(self.data['fields'])):
-            j = self.data['fields'][i]
-            self.data['name'][j] = self.data['fieldNames'][j]
+        config.data['name'] = ["" for x in range(config.data['fieldNames'].shape[0])]
+        config.data['value'] = np.zeros(config.data['fieldNames'].shape).tolist()
+        config.data['code'] = np.zeros(config.data['fieldNames'].shape).tolist()
+        for i in range(0, len(config.data['fields'])):
+            j = config.data['fields'][i]
+            config.data['name'][j] = config.data['fieldNames'][j]
 
             # Quantize data
             dataRange = (np.max(rawData[:, j]) - np.min(rawData[:, j]))
             if dataRange:
-                self.data['value'][j] = np.int64(np.floor( (self.data['buckets'][j] - 1) * (rawData[:, j] - np.min(rawData[:, j])) / dataRange + 1 ))
+                config.data['value'][j] = np.int64(np.floor( (config.data['buckets'][j] - 1) * (rawData[:, j] - np.min(rawData[:, j])) / dataRange + 1 ))
             else:
-                self.data['value'][j] = np.ones((self.data['N'], 1))
-            self.data['code'][j] = self.encodeScalar(self.data['nBits'][j], self.data['buckets'][j], self.data['width'][j], self.data['shift'][j])
-            print(self.data['code'][j].shape)
-        print(self.data['code'])
-        return self.data
+                config.data['value'][j] = np.ones((config.data['N'], 1))
+            config.data['code'][j] = self.encodeScalar(config.data['nBits'][j], config.data['buckets'][j], config.data['width'][j], config.data['shift'][j])
+            print(config.data['code'][j].shape)
+        print(config.data['code'])
+        # return config.data
 
     def encodeScalar(self, n, buckets, width, shift):
         """Returns the SCR"""

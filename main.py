@@ -6,7 +6,7 @@ def main():
     en = encoderNAB()
     en.encode(filename, 21)
     print("before rt")
-    print(rt)
+    print(config.data)
     print("After encode function")
 
 
