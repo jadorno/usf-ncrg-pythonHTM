@@ -32,6 +32,21 @@ def spatialPooler(encodedInput, learnP, displayFlag):
     active = overlap > 0
     print(active.shape)
     print(active)
+
+    if learnP:
+        # Learning
+        activeSynapsesIndex = np.zeros(config.SP['synapse'].shape, dtype=bool)
+        encodact = (encodedInput.T > 0)
+        activeSynapsesIndex[active[:, 0]] = encodact
+        config.SP['synapse'][activeSynapsesIndex] = np.minimum(1.0, (config.SP['synapse'][activeSynapsesIndex] + config.SP['synPermActiveInc']) )
+
+        inactiveSynapsesIndex = np.logical_not(activeSynapsesIndex)
+        config.SP['synapse'][inactiveSynapsesIndex] = np.maximum(0, (config.SP['synapse'][inactiveSynapsesIndex] - config.SP['synPermInactiveDec']))
+
+
+        # Boosting
+        # The inhibition radius is the entire input
+
     return active.T
 
 
