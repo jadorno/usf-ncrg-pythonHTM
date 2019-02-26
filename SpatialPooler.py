@@ -46,6 +46,23 @@ def spatialPooler(encodedInput, learnP, displayFlag):
 
         # Boosting
         # The inhibition radius is the entire input
+        config.SP['minDutyCycle'] = 0.01 * np.max(config.SP['activeDutyCycle'])
+
+        # Computes a moving average of how often column c has been active after inhibition.
+        config.SP['activeDutyCycle'] = ((0.9 * config.SP['activeDutyCycle']) + (0.1 * active))
+
+        # The boost value is a scalar between 1 and maxBoost. If activeDutyCyle(c)
+        # is above minDutyCycle(c), the boost value is 1. The boost increases
+        # linearly once the column's activeDutyCycle starts falling below its
+        # minDutyCycle up to a maximum value maxBoost.
+        config.SP['boost'] = np.minimum(config.SP['maxBoost'], np.fmax(1.0, config.SP['minDutyCycle']/config.SP['activeDutyCycle']).astype(int))
+
+        inDuty = np.where(config.SP['overlapDutyCycle'] < config.SP['minDutyCycle'])
+        print(inDuty)
+        # config.SP['synapse'][]
+        config.SP['synapse'][inDuty[0]] = config.SP['synapse'][inDuty[0]] + 0.1
+        config.SP['synapse'] = config.SP['synapse'] * config.SP['connections']
+
 
     return active.T
 

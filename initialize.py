@@ -30,9 +30,9 @@ def initialize():
     config.SP['minDutyCycle'] = np.zeros((config.SM['N'], 1))
 
     # Initialize the spatial pooler
-    iN = np.sum(config.data['nBits'][config.data['fields']])
-    config.SP['connections'] = np.zeros((config.SM['N'], iN), dtype=bool)
-    config.SP['synapse'] = np.zeros((config.SM['N'], iN))
+    iN = np.sum(config.data['nBits'][config.data['fields']])  # Number of bits in scalar encoder
+    config.SP['connections'] = np.zeros((config.SM['N'], iN), dtype=bool)  # Stores the SP cell connections with the input space
+    config.SP['synapse'] = np.zeros((config.SM['N'], iN))  # Stores the Synaptic permanence values
     W = int(round(config.SP['potentialPct'] * iN))
 
     for i in range(0, config.SM['N']):
