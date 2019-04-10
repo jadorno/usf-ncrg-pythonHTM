@@ -21,7 +21,17 @@ def initialize():
     # Parameters for Sequence Memory
     config.SM['N'] = 2048  # Number of columns N
     config.SM['M'] = 32  # Number of cells per column M
+    config.SM['Nd'] = 128  # Maximum number of dendritic segments per cell
+    config.SM['Ns'] = 128  # Maximum number of synapses per dendritic segment
+    config.SM['Nss'] = 30  # Maximum number of synapses per dendritic segment
 
+    config.SM['Theta'] = 20  # Dendritic segment activation threshold
+    config.SM['minPositiveThreshold'] = 10  #
+    config.SM['P_initial'] = 0.24  # Initial synaptic permanence
+    config.SM['P_thresh'] = 0.5  # Connection threshold for synaptic permanence
+    config.SM['P_incr'] = 0.04  # synaptic permanence increment
+    config.SM['P_decr'] = 0.008  # synaptic permanence decrement
+    config.SM['P_decr_pred'] = 0.001  # Synaptic permanence decrement for predicted inactive segments
 
     # Setup arrays for spatial pooler
     config.SP['boost'] = np.ones((config.SM['N'], 1))
@@ -41,4 +51,39 @@ def initialize():
         config.SP['synapse'][i][connectIndex[0]] = randPermTemplate
         config.SP['connections'][i][connectIndex[0]] = True
 
+    ## Setup arrays for sequence memory
+    # Copy of cell states used to predict
+    config.SM['cellActive'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)
+    config.SM['predictedActive'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)
+    config.SM['cellActivePrevious'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)  # previous time
 
+    config.SM['cellPredicted'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)
+    config.SM['cellPredictedPrevious'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)
+
+    config.SM['cellLearn'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)
+    config.SM['cellLearnPrevious'] = np.zeros((config.SM['M'], config.SM['N']), dtype=int)
+
+    config.SM['maxDendrites'] = round(config.SP['activeSparse'] * config.SM['N'] * config.SM['M'] * config.SM['Nd'])
+    config.SM['maxSynapses'] = round(config.SP['activeSparse'] * config.SM['N'] * config.SM['M'] * config.SM['Nd'] * config.SM['Ns'])
+    config.SM['totalDendrites'] = 0
+    config.SM['totalSynapses'] = 0
+    config.SM['newDendriteID'] = 1
+    config.SM['newSynapseID'] = 1
+
+    config.SM['numDendritesPerCell'] = np.zeros((config.SM['M'], config.SM['N']))  # stores number of dendrite information per cell
+    config.SM['numSynapsesPerCell'] = np.zeros((config.SM['M'], config.SM['N']))  # stores number of dendrite information per cell
+    config.SM['numSynapsesPerDendrite'] = np.zeros((config.SM['maxDendrites'], 1))
+
+    config.SM['synapseToCell'] = np.zeros((config.SM['maxSynapses'], 1))
+    config.SM['synapseToDendrite'] = np.zeros((config.SM['maxSynapses'], 1))
+    config.SM['synapsePermanence'] = np.zeros((config.SM['maxSynapses'], 1))
+    config.SM['synapseActive'] = []
+    config.SM['synapsePositive'] = []
+    config.SM['synapseLearn'] = []
+
+    config.SM['dendriteToCell'] = np.zeros((config.SM['maxDendrites'], 1))
+    config.SM['dendritePositive'] = np.zeros((config.SM['maxDendrites'], 1))
+    config.SM['dendriteActive'] = np.zeros((config.SM['maxDendrites'], 1))
+    config.SM['dendriteLearn'] = np.zeros((config.SM['maxDendrites'], 1))
+
+    config.anomalyScores = np.zeros((config.SM['N'], 1))
