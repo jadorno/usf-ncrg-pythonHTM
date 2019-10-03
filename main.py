@@ -29,6 +29,7 @@ def main(inFile, outFile, displayFlag, learnFlag, learntDataFile):
         print('learning sparse distributed representations using spatial pooling... Done.')
 
         # Setup arrays
+        # [ToDo: comment the usage of these arrays below]
         config.predictions = np.zeros((3, config.data['N']))
         config.SM['inputPrevious'] = np.zeros((config.SM['N'], 1))
         # [ToDo: check the datatype of inputCodes, inputSDR]
@@ -56,7 +57,7 @@ def main(inFile, outFile, displayFlag, learnFlag, learntDataFile):
             pi = (np.sum(config.SM['cellPredicted'], axis=0)).astype(int)
             config.anomalyScores[iteration] = 1 - (np.count_nonzero( pi & config.SM['input'] ) / np.count_nonzero(config.SM['input']) )
 
-            ## Run the input hrough sequence Memory (SM) module to compute the active cells in SM and also the predictions for the next time instant.
+            ## Run the input through sequence Memory (SM) module to compute the active cells in SM and also the predictions for the next time instant.
             sequenceMemory.sequenceMemory(learnFlag)
 
             # if displayFlag:

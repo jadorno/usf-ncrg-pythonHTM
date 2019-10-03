@@ -7,6 +7,7 @@ import markLearnStates
 def sequenceMemory(learnFlag):
     """Sequence Memory"""
     markActiveStates.markActiveStates()
+    
 
     """"if learnFlag:
         markLearnStates.markLearnStates()
