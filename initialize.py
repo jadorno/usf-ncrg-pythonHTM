@@ -67,8 +67,8 @@ def initialize():
     config.SM['maxSynapses'] = round(config.SP['activeSparse'] * config.SM['N'] * config.SM['M'] * config.SM['Nd'] * config.SM['Ns'])
     config.SM['totalDendrites'] = 0
     config.SM['totalSynapses'] = 0
-    config.SM['newDendriteID'] = 1
-    config.SM['newSynapseID'] = 1
+    config.SM['newDendriteID'] = 0
+    config.SM['newSynapseID'] = 0
 
     config.SM['numDendritesPerCell'] = np.zeros((config.SM['M'], config.SM['N']))  # stores number of dendrite information per cell
     config.SM['numSynapsesPerCell'] = np.zeros((config.SM['M'], config.SM['N']))  # stores number of dendrite information per cell

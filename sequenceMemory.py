@@ -7,12 +7,11 @@ import markLearnStates
 def sequenceMemory(learnFlag):
     """Sequence Memory"""
     markActiveStates.markActiveStates()
-    
 
-    """"if learnFlag:
+    if learnFlag:
         markLearnStates.markLearnStates()
-        updateSynapses.updateSynapses()
+        # updateSynapses.updateSynapses()
 
-    # predic next state
+    """# predic next state
     config.SM['cellPredictedPrevious'] = config.SM['cellPredicted']
     markPredictiveStates.markPredictiveStates()"""
