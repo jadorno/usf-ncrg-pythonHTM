@@ -1,8 +1,10 @@
-import numpy as np
+# import numpy as np
 
 import config
 import markActiveStates
 import markLearnStates
+import updateSynapses
+import markPredictiveStates
 
 def sequenceMemory(learnFlag):
     """Sequence Memory"""
@@ -10,8 +12,8 @@ def sequenceMemory(learnFlag):
 
     if learnFlag:
         markLearnStates.markLearnStates()
-        # updateSynapses.updateSynapses()
+        updateSynapses.updateSynapses()
 
-    """# predic next state
+    # predic next state
     config.SM['cellPredictedPrevious'] = config.SM['cellPredicted']
-    markPredictiveStates.markPredictiveStates()"""
+    markPredictiveStates.markPredictiveStates()

@@ -96,6 +96,7 @@ def markLearnStates():
 
 
 
+
 def getBestMachingCell(j, i):
     """
     i could be a vector - is the list of active cells (could be bursting) in the column, j.
