@@ -82,5 +82,5 @@ def main(inFile, outFile, displayFlag, learnFlag, learntDataFile):
 
 
 if __name__ == '__main__':
-    inFile = "C:/Users/kamidi/Desktop/NCRG Janardhan/HTM/HTM Code/NCRG pythonHTM/NAB_input_csv_files/numentaTM_speed_7578.csv"
+    inFile = "NAB_input_csv_files/numentaTM_speed_7578.csv"
     main(inFile, '', False, True, '')
