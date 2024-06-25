@@ -13,15 +13,15 @@ WORKDIR /usr/src/
 
 ENV LD_LIBRARY_PATH=/usr/local/lib
 
-RUN wget "https://www.python.org/ftp/python/3.6.9/Python-3.6.9.tgz" \
-    && tar xzvf Python-3.6.9.tgz \
-    && cd Python-3.6.9 \
+RUN wget "https://www.python.org/ftp/python/3.7.9/Python-3.7.9.tgz" \
+    && tar xzvf Python-3.7.9.tgz \
+    && cd Python-3.7.9 \
     && ./configure --enable-shared \
     && make -j4 \
     && make install \
     && cd /usr/src/ \
-    && wget https://bootstrap.pypa.io/pip/3.6/get-pip.py \
-    && python3.6 get-pip.py
+    && wget https://bootstrap.pypa.io/pip/3.7/get-pip.py \
+    && python3.7 get-pip.py
 
 COPY requirements.txt ./
 RUN python3 -m pip install --no-cache-dir -r requirements.txt
